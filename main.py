@@ -24,6 +24,7 @@ screen = pygame.display.set_mode((600, 450))
 screen.blit(pygame.image.load(map), (0, 0))
 pygame.display.flip()
 running = True
+mode = 'sat'
 while running:
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
@@ -42,11 +43,19 @@ while running:
                 b -= 1 / (z ** 2 + 10)
             if e.key == pygame.K_UP:
                 b += 1 / (z ** 2 + 10)
-    map_request = f"http://static-maps.yandex.ru/1.x/?ll={a},{b}&z={z}&l=map"
+            if e.key == pygame.K_1:
+                mode = 'sat'
+            if e.key == pygame.K_2:
+                mode = 'map'
+            if e.key == pygame.K_3:
+                mode = 'sat,skl'
+    screen.fill(pygame.Color('white'))
+    map_request = f"http://static-maps.yandex.ru/1.x/?ll={a},{b}&z={z}&l={mode}"
     map = bebra(map_request)
     try:
         screen.blit(pygame.image.load(map), (0, 0))
     except Exception:
         pass
+
     pygame.display.flip()
 pygame.quit()
