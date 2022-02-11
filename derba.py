@@ -23,9 +23,10 @@ class MyWidget(QMainWindow):
         global a, b, pts
         adress = self.name_l.text()
         result = str(find_coords(adress))
-        a = float(result.split()[0])
-        b = float(result.split()[-1])
-        pts.append(f'{a},{b}')
+        if result != 'None':
+            a = float(result.split()[0])
+            b = float(result.split()[-1])
+            pts.append(f'{a},{b}')
 
     def delete(self):
         global pts
@@ -45,12 +46,12 @@ def bebra(map_r):
 def find_coords(adr):
     geocoder_request = f"""http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={adr}&format=json"""
     response = requests.get(geocoder_request)
-    if response:
+    try:
         json_response = response.json()
         toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
         toponym_coodrinates = toponym["Point"]["pos"]
         return toponym_coodrinates
-    else:
+    except Exception:
         return
 
 
