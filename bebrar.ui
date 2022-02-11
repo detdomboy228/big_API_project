@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>353</width>
-    <height>142</height>
+    <height>160</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
+      <y>40</y>
       <width>47</width>
       <height>13</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>20</y>
+      <y>40</y>
       <width>121</width>
       <height>20</height>
      </rect>
@@ -41,7 +41,7 @@
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>10</y>
+      <y>30</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -54,13 +54,26 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>70</y>
+      <y>0</y>
       <width>211</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>ВВОДИТЕ КОРРЕКТНЫЙ АДРЕСС</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn2">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>80</y>
+      <width>211</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сброс поискового результата</string>
     </property>
    </widget>
   </widget>
