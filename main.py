@@ -18,11 +18,15 @@ class MyWidget(QMainWindow):
         self.setWindowTitle('       ПАНЕЛЬ УПРАВЛЕНИЯ')
         self.btn.clicked.connect(self.run)
         self.btn2.clicked.connect(self.delete)
+        self.pushButton.clicked.connect(self.on_off_index_potch)
+        self.flag_on_off = True
+        self.pocht_index = ''
 
     def run(self):
         global a, b, pts
         adress = self.name_l.text()
-        result, adress_doma = str(find_coords(adress)[0]), str(find_coords(adress)[1])
+        result, adress_doma, pocht_index = str(find_coords(adress)[0]), str(find_coords(adress)[1]), str(find_coords(adress)[2])
+        self.pocht_index = pocht_index
         self.label_3.setText(adress_doma.split(', ')[-2])
         self.label_4.setText(adress_doma.split(', ')[-1])
         if result != 'None':
@@ -30,12 +34,21 @@ class MyWidget(QMainWindow):
             b = float(result.split()[-1])
             pts.append(f'{a},{b}')
 
+    def on_off_index_potch(self):
+        if self.flag_on_off:
+            self.label_5.setText(self.pocht_index)
+            self.flag_on_off = False
+        else:
+            self.label_5.setText('')
+            self.flag_on_off = True
+
     def delete(self):
         global pts
         del pts[-1]
         self.name_l.setText('')
         self.label_3.setText('')
         self.label_4.setText('')
+        self.pocht_index = ''
 
 
 # 123
@@ -54,8 +67,9 @@ def find_coords(adr):
         json_response = response.json()
         toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
         toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
+        toponym_pocht = toponym["metaDataProperty"]["GeocoderMetaData"]['Address']["postal_code"]
         toponym_coodrinates = toponym["Point"]["pos"]
-        return toponym_coodrinates, toponym_address
+        return toponym_coodrinates, toponym_address, toponym_pocht
     except Exception:
         return
 
