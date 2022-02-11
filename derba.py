@@ -17,6 +17,7 @@ class MyWidget(QMainWindow):
         uic.loadUi('bebrar.ui', self)
         self.setWindowTitle('       ПАНЕЛЬ УПРАВЛЕНИЯ')
         self.btn.clicked.connect(self.run)
+        self.btn2.clicked.connect(self.delete)
 
     def run(self):
         global a, b, pts
@@ -25,6 +26,11 @@ class MyWidget(QMainWindow):
         a = float(result.split()[0])
         b = float(result.split()[-1])
         pts.append(f'{a},{b}')
+
+    def delete(self):
+        global pts
+        del pts[-1]
+        self.name_l.setText('')
 
 
 # 123
@@ -98,4 +104,3 @@ while running:
         pass
     pygame.display.flip()
 pygame.quit()
-
