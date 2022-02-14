@@ -2,7 +2,7 @@ import os
 import sys
 import pygame
 import requests
-import traceback
+import pprint
 from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow
 a = 37.620070
@@ -25,42 +25,46 @@ class MyWidget(QMainWindow):
 
     def run(self):
         global a, b, pts
-        if self.name_l.text() != '':
-            adress = self.name_l.text()
-            try:
-                result = str(find_coords(adress)[0])
-                if (result.split()[0] + ',' + result.split()[1]) in pts:
-                    del pts[pts.index((result.split()[0] + ',' + result.split()[1]))]
-            except Exception:
-                pass
-            try:
-                adress_doma = str(find_coords(adress)[1])
-            except Exception:
-                pass
-            try:
-                pocht_index = str(find_coords(adress)[2])
-                self.pocht_index = pocht_index
-                if self.flag_on_off:
-                    self.label_5.setText(self.pocht_index)
-                else:
-                    self.label_5.setText('')
-            except Exception:
-                self.label_5.setText('-')
-            try:
-                self.label_3.setText(adress_doma)
-            except Exception:
-                pass
-            if result != 'None':
-                a = float(result.split()[0])
-                b = float(result.split()[-1])
-                pts.append(f'{a},{b}')
-        else:
-            self.label_3.setText(find_coords(f'{a},{b}')[1])
-            if self.flag_on_off:
+        try:
+            if self.name_l.text() != '':
+                ex.label_6.setText('')
+                adress = self.name_l.text()
                 try:
-                    self.label_5.setText(find_coords(f'{a},{b}')[2])
+                    result = str(find_coords(adress)[0])
+                    if (result.split()[0] + ',' + result.split()[1]) in pts:
+                        del pts[pts.index((result.split()[0] + ',' + result.split()[1]))]
+                except Exception:
+                    pass
+                try:
+                    adress_doma = str(find_coords(adress)[1])
+                except Exception:
+                    pass
+                try:
+                    pocht_index = str(find_coords(adress)[2])
+                    self.pocht_index = pocht_index
+                    if self.flag_on_off:
+                        self.label_5.setText(self.pocht_index)
+                    else:
+                        self.label_5.setText('')
                 except Exception:
                     self.label_5.setText('-')
+                try:
+                    self.label_3.setText(adress_doma)
+                except Exception:
+                    pass
+                if result != 'None':
+                    a = float(result.split()[0])
+                    b = float(result.split()[-1])
+                    pts.append(f'{a},{b}')
+            else:
+                self.label_3.setText(find_coords(f'{a},{b}')[1])
+                if self.flag_on_off:
+                    try:
+                        self.label_5.setText(find_coords(f'{a},{b}')[2])
+                    except Exception:
+                        self.label_5.setText('-')
+        except Exception:
+            pass
 
     def on_off_index_potch(self):
         if self.flag_on_off:
@@ -77,6 +81,7 @@ class MyWidget(QMainWindow):
     def delete(self):
         global pts
         del pts[-1]
+        self.label_6.setText('')
         self.name_l.setText('')
         self.label_3.setText('')
         self.pocht_index = ''
@@ -112,40 +117,70 @@ def find_coords(adr):
 
 def mouse_click(pos):
     global a, b, z
+    ex.label_6.setText('')
     chislo_govna = ((12756 * 3.14) / ((4 ** z) ** 0.5))
     chislo_govna1 = ((12714 * 3.14) / ((4 ** z) ** 0.5)) / 2
     x, y = pos
     if x < 300:
         raznx = 300 - x
-        if a >= ((raznx / 300) * chislo_govna) / 100:
-            a -= ((raznx / 300) * chislo_govna) / 100
-        else:
-            a -= ((raznx / 300) * chislo_govna) / 100
-            a = abs(a)
+        a -= ((raznx / 300) * chislo_govna) / 95
     else:
         raznx = x - 300
-        if (a + ((raznx / 300) * chislo_govna) / 100) <= 180:
-            a += ((raznx / 300) * chislo_govna) / 100
-        else:
-            a += ((raznx / 300) * chislo_govna) / 100
-            a = 180 - (a - 180)
+        a += ((raznx / 300) * chislo_govna) / 95
     if y < 225:
         razny = 225 - y
-        if b >= ((razny / 225) * chislo_govna1) / 111.11111:
-            b += ((razny / 225) * chislo_govna1) / 111.11111
-        else:
-            b += ((razny / 225) * chislo_govna1) / 111.11111
-            b = abs(b)
+        b += ((razny / 225) * chislo_govna1) / 111
     else:
         razny = y - 225
-        if (b - ((razny / 225) * chislo_govna1) / 111.11111) <= 180:
-            b -= ((razny / 225) * chislo_govna1) / 111.11111
-        else:
-            b -= ((razny / 225) * chislo_govna1) / 111.11111
-            b = 180 - (b - 180)
+        b -= ((razny / 225) * chislo_govna1) / 111
     if '{a},{b}' not in pts:
         pts.append(f'{a},{b}')
     ex.run()
+
+
+def org_find(pos):
+    global z, a, b
+    ex.label_6.setText('')
+    x, y = pos
+    chislo_govna = ((12756 * 3.14) / ((4 ** z) ** 0.5))
+    chislo_govna1 = ((12714 * 3.14) / ((4 ** z) ** 0.5)) / 2
+    if x < 300:
+        raznx = 300 - x
+        a = a - ((raznx / 300) * chislo_govna) / 95
+    else:
+        raznx = x - 300
+        a = a + ((raznx / 300) * chislo_govna) / 95
+    if y < 225:
+        razny = 225 - y
+        b = b + ((razny / 225) * chislo_govna1) / 111
+    else:
+        razny = y - 225
+        b = b - ((razny / 225) * chislo_govna1) / 111
+    adr = find_coords(f'{a}, {b}')[1]
+    s = [e for e in adr.split()]
+    s = '+'.join(s)
+    req = f'https://search-maps.yandex.ru/v1/?text={s}&ll={a},{b}&spn=0.00000045,0.00000045&type=biz&lang=ru_RU&apikey=dda3ddba-c9ea-4ead-9010-f43fbc15c6e3'
+    if x < 300:
+        a = a + ((raznx / 300) * chislo_govna) / 95
+    else:
+        a = a - ((raznx / 300) * chislo_govna) / 95
+    if y < 225:
+        b = b - ((razny / 225) * chislo_govna1) / 111
+    else:
+        b = b + ((razny / 225) * chislo_govna1) / 111
+    resp = requests.get(req)
+    cn = {}
+    try:
+        res = resp.json()
+        for e in res["features"]:
+            coord = e['properties']['boundedBy']
+            cc1 = ((coord[0][0] + coord[1][0] / 2) ** 2 + ((coord[0][1] + coord[1][1]) / 2) ** 2) ** 0.5
+            name = e['properties']['name']
+            cn[name] = cc1
+        cn = {k: cn[k] for k in sorted(cn, key=cn.get)}
+        ex.label_6.setText(list(cn.keys())[-1])
+    except Exception:
+        ex.label_6.setText('')
 
 
 pygame.init()
@@ -165,9 +200,11 @@ while running:
             running = False
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_PAGEUP:
-                z += 1
+                if z < 19:
+                    z += 1
             if e.key == pygame.K_PAGEDOWN:
-                z -= 1
+                if z > 3:
+                    z -= 1
             if e.key == pygame.K_RIGHT:
                 a += 1 / z ** 2
             if e.key == pygame.K_LEFT:
@@ -186,6 +223,8 @@ while running:
             if e.button == 1:
                 ex.name_l.setText('')
                 mouse_click(e.pos)
+            elif e.button == 3:
+                org_find(e.pos)
     screen.fill(pygame.Color('white'))
     map_request = f"http://static-maps.yandex.ru/1.x/?ll={a},{b}&z={z}&l={mode}"
     if pts:
